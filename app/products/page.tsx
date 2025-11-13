@@ -1,24 +1,23 @@
 "use client"
-import { useStore } from '@/store/useStore';
 import { useEffect, useState } from 'react';
-import type { Product } from '@/types';
+import type { IProduct } from '@/types';
 import { Button } from '@/components/ui/button';
 import { ProductCard } from '@/components/ui/productCard';
 import { Bookmark } from 'lucide-react';
+import { useProducts, useIsLoading, useFetchProducts, useToggleBookmark, useRemoveProduct } from '@/store/useProductStore';
 
 export default function Products() {
-  const {
-    products,
-    fetchUsers,
-    toggleBookmark,
-    isFetching,
-    removeProduct
-  } = useStore();
-  const [filteredProducts, setFilteredProducts] = useState<Product[]>([]);
+  const products = useProducts();
+  const isLoading = useIsLoading();
+  const fetchProducts = useFetchProducts();
+  const toggleBookmark = useToggleBookmark();
+  const removeProduct = useRemoveProduct();
+
+  const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
   const [isFiltered, setIsFiltered] = useState<Boolean>(false);
 
   useEffect(() => {
-    fetchUsers();
+    fetchProducts();
   }, []);
 
   useEffect(() => {
@@ -31,7 +30,7 @@ export default function Products() {
       setFilteredProducts(products);
       setIsFiltered(false);
     } else {
-      setFilteredProducts(products.filter((product: Product) => product.isBookmarked));
+      setFilteredProducts(products.filter((product: IProduct) => product.isBookmarked));
       setIsFiltered(true);
     }
   }
@@ -54,10 +53,10 @@ export default function Products() {
 
       <div className="grid grid-cols-3 gap-4">
 
-        {isFetching ?
+        {isLoading ?
           <div>Loading...</div>
           :
-          filteredProducts.map((product: Product) => (
+          filteredProducts.map((product: IProduct) => (
             <ProductCard
               key={product.id}
               {...product}

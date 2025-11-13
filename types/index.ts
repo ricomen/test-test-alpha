@@ -1,23 +1,47 @@
-export interface Product {
-    id: string
-    name: string
-    price: number
-    debut: number
+
+interface Dimensions {
+    width: number;
+    height: number;
+    depth: number;
+  }
+  
+  interface Review {
+    rating: number;
+    comment: string;
+    date: string;
+    reviewerName: string;
+    reviewerEmail: string;
+  }
+  
+  interface Meta {
+    createdAt: string;
+    updatedAt: string;
+    barcode: string;
+    qrCode: string;
+  }
+  
+export interface IProduct {
+    id: number;
+    title: string;
+    description: string;
+    category: 'beauty';
+    price: number;
+    discountPercentage: number;
+    rating: number;
+    stock: number;
+    tags: ('beauty' | 'mascara')[];
+    brand: 'Essence';
+    sku: string;
+    weight: number;
+    dimensions: Dimensions;
+    warrantyInformation: string;
+    shippingInformation: string;
+    availabilityStatus: 'Low Stock' | 'In Stock' | 'Out of Stock';
+    reviews: Review[];
+    returnPolicy: string;
+    minimumOrderQuantity: number;
+    meta: Meta;
+    thumbnail: string;
+    images: string[];
     isBookmarked?: boolean
-}
-
-export interface ProductCardProps extends Product {
-    onToggleBookmark: (id: Product['id']) => void
-    onRemoveProduct: (id: Product['id']) => void
-}
-
-export interface StoreState {
-    products: Product[]
-    isFetching: boolean
-    fetchUsers: () => Promise<void>
-    toggleBookmark: (id: Product['id']) => void
-    addProduct: (product: Product) => void
-    removeProduct: (id: Product['id']) => void
-    clearProducts: () => void
-}
-
+  }

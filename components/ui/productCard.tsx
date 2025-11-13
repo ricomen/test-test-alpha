@@ -1,23 +1,76 @@
 import { FC } from "react";
-import { Card, CardContent, CardFooter, CardHeader } from "./card";
-import { Bookmark } from "lucide-react";
-import { Button } from "./button";
-import type { ProductCardProps } from "@/types";
+import { Card, CardHeader, CardTitle, CardContent } from "./card";
+import { Bookmark, X } from "lucide-react";
+import { useRouter } from "next/navigation";
+import Image from "next/image";
+import type { IProduct } from "@/types";
 
-export const ProductCard: FC<ProductCardProps> = ({ id, isBookmarked, debut, name, onToggleBookmark, onRemoveProduct }) => (
-    <Card className="relative" onClickCapture={() => console.log('onClick')}>
-        <button
-            className="absolute -top-2 right-2"
-            onClick={() => onToggleBookmark(id)}
-        >
-            <Bookmark size={32} fill={isBookmarked ? 'bg-zinc-50' : 'white'} />
-        </button>
-        <CardHeader>{name}</CardHeader>
-        <CardContent className="line-clamp-2">
-            Debut Year: {debut}
-        </CardContent>
-        <CardFooter className="mt-auto">
-            <Button className="w-full" size="sm" variant="destructive" onClick={() => onRemoveProduct(id)}>Удалить</Button>
-        </CardFooter>
+interface IProps extends IProduct {
+  onToggleBookmark: (id: IProduct['id']) => void
+  onRemoveProduct: (id: IProduct['id']) => void
+}
+
+export const ProductCard: FC<IProps> = ({
+  id,
+  brand,
+  description,
+  thumbnail,
+  title,
+  isBookmarked,
+  onToggleBookmark,
+  onRemoveProduct
+}) => {
+  const router = useRouter();
+
+  return (
+    <Card
+      className="relative group"
+      onClick={() => router.push(`/products/${id}`)}
+      role="button"
+      tabIndex={0}
+    >
+
+      <button
+        className="absolute -top-2 right-2"
+        onClick={(evt) => {
+          evt.stopPropagation()
+          onToggleBookmark(id)
+        }}
+      >
+        <Bookmark size={32} fill={isBookmarked ? 'bg-zinc-50' : 'white'} />
+      </button>
+
+      <button
+        className="absolute -left-2 -top-2 p-1 hidden group-hover:block rounded-full color-white bg-destructive hover:bg-destructive/70 shadow-sm"
+        onClick={(evt) => {
+          evt.stopPropagation()
+          onRemoveProduct(id)
+        }}
+      >
+        <X size={16} stroke="white" fill="white" />
+      </button>
+
+      <CardHeader>
+        <CardTitle>
+          {brand}
+        </CardTitle>
+      </CardHeader>
+
+      <CardContent className="text-sm line-clamp-2">
+        <Image
+          src={thumbnail}
+          loading="eager"
+          width={100}
+          height={100}
+          alt={title}
+          style={{
+            width: "100%",
+            height: 'auto'
+          }}
+        />
+        {description}
+      </CardContent>
+
     </Card>
-)
+  )
+}

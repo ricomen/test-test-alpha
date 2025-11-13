@@ -1,10 +1,50 @@
-import Link from "next/link";
+"use client"
+import { use } from "react"
+import { useProducts } from "@/store/useProductStore"
+import { IProduct } from "@/types"
+import Image from "next/image"
 
-export default function ProductPage() {
+export default function ProductPage({ params }: { params: Promise<{ id: IProduct['id'] }> }) {
+  const { id } = use(params)
+  const products = useProducts()
+  const product = products.find((product) => product.id === Number(id))
+
+  if (!product) {
+    return <div>Нечего показать</div>
+  }
+  const { title, brand, description, price, thumbnail, images } = product
+
   return (
-    <div>
-      <Link href="/">На главную</Link>
-      ProductPage
-    </div>
+    <main>
+      <Image width={200} height={200} src={thumbnail} alt={title} />
+      <p>
+        <span className="text-muted-foreground">Name:</span> {title}
+      </p>
+      <p>
+        <span className="text-muted-foreground">Brand:</span> {brand}
+      </p>
+      <p><span className="text-muted-foreground">Description:</span> {description}</p>
+      <p><span className="text-muted-foreground">Price:</span> {price}</p>
+      {images.length && (
+        <ul className="flex flex-wrap gap-2">
+          {images?.map((image) => (
+            <li key={image}>
+              <Image
+                unoptimized
+                src={image}
+                loading="eager"
+                width={200}
+                height={200}
+                style={{
+                  width: '200px',
+                  height: 'auto'
+                }}
+                alt={title}
+              />
+            </li>
+          ))}
+        </ul>
+      )}
+    </main>
   )
 }
