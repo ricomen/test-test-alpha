@@ -14,5 +14,8 @@ export const PageNavBar = () => {
     <Button variant={isActive('/products') ? "default" : "outline"} asChild>
       <Link href="/products">Продукты</Link>
     </Button>
+    <Button variant={isActive('/create-product') ? "default" : "outline"} asChild>
+      <Link href="/create-product">Добавление продукта</Link>
+    </Button>
   </nav>
 )}
