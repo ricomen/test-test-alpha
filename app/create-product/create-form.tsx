@@ -8,7 +8,7 @@ import { useAddProduct } from '@/store/useProductStore'
 
 export const myFormSchema = z.object({
     title: z.string().min(2, { error: "Текст слишком короткий" }).max(50, { error: "Текст слшком длинный" }),
-    decription: z.string().min(10, { error: "Текст слишком короткий" }).max(100, { error: "Текст слшком длинный" }),
+    description: z.string().min(10, { error: "Текст слишком короткий" }).max(100, { error: "Текст слшком длинный" }),
 });
 
 type FormData = z.infer<typeof myFormSchema>;
@@ -17,7 +17,7 @@ const ReqiredFileMessage: FC<{ message: string }> = ({ message }) => <p classNam
 
 export const CreateProductForm = () => {
     const addProduct = useAddProduct();
-    const { handleSubmit, control } = useForm<FormData>({
+    const { handleSubmit, control, reset } = useForm<FormData>({
         mode: 'all',
         reValidateMode: "onBlur",
         resolver: zodResolver(myFormSchema)
@@ -54,6 +54,8 @@ export const CreateProductForm = () => {
             thumbnail: '',
             images: []
         });
+
+        reset();
     }
 
     return (
@@ -96,7 +98,7 @@ export const CreateProductForm = () => {
                 </label>
                 <Controller
                     control={control}
-                    name="decription"
+                    name="description"
                     defaultValue=""
                     render={({ field, fieldState }) => (
                         <>
@@ -117,3 +119,4 @@ export const CreateProductForm = () => {
         </form>
     )
 }
+

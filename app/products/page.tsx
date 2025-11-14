@@ -1,5 +1,5 @@
 "use client"
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useMemo } from 'react';
 import type { IProduct } from '@/types';
 import { Button } from '@/components/ui/button';
 import { ProductCard } from '@/components/ui/productCard';
@@ -12,28 +12,19 @@ export default function Products() {
   const fetchProducts = useFetchProducts();
   const toggleBookmark = useToggleBookmark();
   const removeProduct = useRemoveProduct();
+  const [isFiltered, setIsFiltered] = useState<boolean>(false);
 
-  const [filteredProducts, setFilteredProducts] = useState<IProduct[]>([]);
-  const [isFiltered, setIsFiltered] = useState<Boolean>(false);
+  const filteredProducts = useMemo(() => {
+    return isFiltered 
+      ? products.filter((product: IProduct) => product.isBookmarked)
+      : products;
+  }, [products, isFiltered]);
 
   useEffect(() => {
     fetchProducts();
-  }, []);
+  }, [fetchProducts]);
 
-  useEffect(() => {
-    setFilteredProducts(products);
-    setIsFiltered(false);
-  }, [products]);
-
-  const toggleFilteredProducts = () => {
-    if (isFiltered) {
-      setFilteredProducts(products);
-      setIsFiltered(false);
-    } else {
-      setFilteredProducts(products.filter((product: IProduct) => product.isBookmarked));
-      setIsFiltered(true);
-    }
-  }
+  const toggleFilteredProducts = () => setIsFiltered(prev => !prev)
 
   return (
     <main className="min-h-screen">

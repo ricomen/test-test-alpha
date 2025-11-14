@@ -21,7 +21,7 @@ const initialState: IInitialState = {
     isLoading: false,
 }
 
-const counterStore: StateCreator<IStoreState, [["zustand/devtools", never], ["zustand/persist", unknown]]> = ((set) => ({
+const counterStore: StateCreator<IStoreState, [["zustand/devtools", never], ["zustand/persist", unknown]]> = ((set, get) => ({
     ...initialState,
     toggleBookmark: (id: IProduct['id']) => set((state: IStoreState) => ({
         products: state.products.map(product => ({
@@ -30,6 +30,10 @@ const counterStore: StateCreator<IStoreState, [["zustand/devtools", never], ["zu
         }))
     }), false, 'toggleBookmark'),
     fetchProducts: async () => {
+        const state = get();
+        if (state.products.length > 0) {
+            return;
+        }
         set({ isLoading: true }, false, 'fetchProducts');
         try {
             const response = await fetch('https://dummyjson.com/products');
