@@ -1,8 +1,9 @@
-import { CreateProductForm } from "./create-form"
+import { CreateProductForm } from './create-form'
+
 export default function CreateProductsPage() {
-    return (
-        <div>
-            <CreateProductForm />
-        </div>
-    )
+  return (
+    <div>
+      <CreateProductForm />
+    </div>
+  )
 }
