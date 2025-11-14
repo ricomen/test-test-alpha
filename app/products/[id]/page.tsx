@@ -1,17 +1,19 @@
 "use client"
 import { use } from "react"
-import { useProducts } from "@/store/useProductStore"
+import { useGetProduct } from "@/store/useProductStore"
 import { IProduct } from "@/types"
 import Image from "next/image"
 
 export default function ProductPage({ params }: { params: Promise<{ id: IProduct['id'] }> }) {
   const { id } = use(params)
-  const products = useProducts()
-  const product = products.find((product) => product.id === Number(id))
+  const product = useGetProduct(id)
 
   if (!product) {
-    return <div>Нечего показать</div>
+    return <main>
+      <div>Нечего показать</div>
+    </main>
   }
+
   const { title, brand, description, price, thumbnail, images } = product
 
   return (
@@ -31,7 +33,7 @@ export default function ProductPage({ params }: { params: Promise<{ id: IProduct
             <li key={image}>
               <Image
                 unoptimized
-                src={image}
+                src={image || '/next.svg'}
                 loading="eager"
                 width={200}
                 height={200}

@@ -4,25 +4,26 @@ import type { IProduct } from '@/types';
 import { Button } from '@/components/ui/button';
 import { ProductCard } from '@/components/ui/productCard';
 import { Bookmark } from 'lucide-react';
-import { useProducts, useIsLoading, useFetchProducts, useToggleBookmark, useRemoveProduct } from '@/store/useProductStore';
+import { useProducts, useToggleBookmark, useRemoveProduct, useAddProduct, useSetProducts } from '@/store/useProductStore';
+import { useProductsQuery } from '@/lib/queries/products';
 
 export default function Products() {
   const products = useProducts();
-  const isLoading = useIsLoading();
-  const fetchProducts = useFetchProducts();
   const toggleBookmark = useToggleBookmark();
   const removeProduct = useRemoveProduct();
   const [isFiltered, setIsFiltered] = useState<boolean>(false);
+  const { data = [], isLoading } = useProductsQuery();
+  const setProducts = useSetProducts();
+
+  useEffect(() => {
+    setProducts(data)
+  }, []);
 
   const filteredProducts = useMemo(() => {
-    return isFiltered 
+    return isFiltered
       ? products.filter((product: IProduct) => product.isBookmarked)
       : products;
   }, [products, isFiltered]);
-
-  useEffect(() => {
-    fetchProducts();
-  }, [fetchProducts]);
 
   const toggleFilteredProducts = () => setIsFiltered(prev => !prev)
 

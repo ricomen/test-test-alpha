@@ -1,5 +1,5 @@
 import { FC } from "react";
-import { Card, CardHeader, CardTitle, CardContent } from "./card";
+import { Card, CardHeader, CardTitle, CardContent, CardFooter } from "./card";
 import { Bookmark, X } from "lucide-react";
 import { useRouter } from "next/navigation";
 import Image from "next/image";
@@ -12,7 +12,6 @@ interface IProps extends IProduct {
 
 export const ProductCard: FC<IProps> = ({
   id,
-  brand,
   description,
   thumbnail,
   title,
@@ -50,15 +49,15 @@ export const ProductCard: FC<IProps> = ({
         <X size={16} stroke="white" fill="white" />
       </button>
 
-      <CardHeader>
+      <CardHeader className="line-clamp-1">
         <CardTitle>
-          {brand}
+          {title}
         </CardTitle>
       </CardHeader>
 
-      <CardContent className="text-sm line-clamp-2">
+      <CardContent>
         <Image
-          src={thumbnail}
+          src={thumbnail || '/next.svg'}
           loading="eager"
           width={100}
           height={100}
@@ -68,8 +67,10 @@ export const ProductCard: FC<IProps> = ({
             height: 'auto'
           }}
         />
-        {description}
       </CardContent>
+      <CardFooter className="text-sm line-clamp-2">
+        {description}
+      </CardFooter>
 
     </Card>
   )

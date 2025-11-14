@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import { PageNavBar } from "@/components/ui/pageNavBar";
+import { QueryProvider } from "@/components/providers/QueryProvider";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,12 +29,14 @@ export default function RootLayout({
       <body
         className={`flex flex-col ${geistSans.variable} ${geistMono.variable} antialiased dark:bg-black`}
       >
-        <header className="w-full max-w-3xl mx-auto py-2">
-          <PageNavBar />
-        </header>
-        <div className="flex flex-col w-full max-w-3xl mx-auto p-4">
-          {children}
-        </div>
+        <QueryProvider>
+          <header className="w-full max-w-3xl mx-auto py-2">
+            <PageNavBar />
+          </header>
+          <div className="flex flex-col w-full max-w-3xl mx-auto p-4">
+            {children}
+          </div>
+        </QueryProvider>
       </body>
     </html>
   );
